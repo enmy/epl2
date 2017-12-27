@@ -4,7 +4,7 @@ namespace EPL2;
 /**
  * LO Command - Line Draw Black
  *
- * Use this com mand to draw black lines, over writing previous information.
+ * Use this command to draw black lines, over writing previous information.
  *
  * LOp1,p2,p3,p4
  * p1 = Horizontal start position (X) in dots.
@@ -49,11 +49,6 @@ class LineDrawBlack
      */
     public function __toString()
     {
-        // Horizontal
-        $p3 = $this->length;
-
-        $p4 = $this->width;
-
         return $this->command. $this->start_position. ','. $this->getHorizontalLength(). ','. $this->getVerticalLength();
     }
 
