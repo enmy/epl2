@@ -6,7 +6,7 @@ class TextLines extends ASCIIText implements CommandInterface
     protected $max_length;
 
     /** @var array Puntos que ocupa cada formato de letra. x - ancho, y - alto */
-    protected $font_size = array(
+    protected static $font_sizes = array(
         1 => array(
             'x' => 8,
             'y' => 12,
@@ -48,7 +48,7 @@ class TextLines extends ASCIIText implements CommandInterface
         $texts = $this->splitData();
 
         $return = array();
-        $gap = $this->font_size[$this->font]['y'];
+        $gap = static::$font_sizes[$this->font]['y'];
 
         $start_position = $this->start_position->getPoint();
         $last_position_y = $start_position['y'];
@@ -84,7 +84,7 @@ class TextLines extends ASCIIText implements CommandInterface
 
     protected function maxCharactersPerLine()
     {
-        return (int) ($this->max_length / $this->font_size[$this->font]['x']);
+        return (int) ($this->max_length / static::$font_sizes[$this->font]['x']);
     }
 
     protected function setMaxLength($max_length)
@@ -95,8 +95,8 @@ class TextLines extends ASCIIText implements CommandInterface
             throw new \Exception('Largo maximo "'. $max_length. '" debe ser mayor a cero (0) en '. __FILE__. ' linea '. __LINE__);
         }
 
-        if ($max_length < $this->font_size[$this->font]['x']) {
-            throw new \Exception('Largo maximo "'. $max_length. '" debe ser mayor a "'. $this->font_size[$this->font]['x']. '" en '. __FILE__. ' linea '. __LINE__);
+        if ($max_length < static::$font_sizes[$this->font]['x']) {
+            throw new \Exception('Largo maximo "'. $max_length. '" debe ser mayor a "'. static::$font_sizes[$this->font]['x']. '" en '. __FILE__. ' linea '. __LINE__);
         }
 
         $this->max_length = $max_length;
@@ -115,5 +115,10 @@ class TextLines extends ASCIIText implements CommandInterface
         $build->setReverse($this->reverse);
 
         return $build;
+    }
+
+    public static function getFontSizes()
+    {
+        return static::$font_sizes;
     }
 }
