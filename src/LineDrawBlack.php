@@ -12,7 +12,7 @@ namespace EPL2;
  * p3 = Horizontal length in dots.
  * p4 = Vertical length in dots.
  */
-class LineDrawBlack
+class LineDrawBlack implements CommandInterface
 {
     const HORIZONTAL = true;
 
@@ -45,11 +45,16 @@ class LineDrawBlack
     }
 
     /**
-     * @return El comando con sus parametros
+     * @see EPL2\CommandInterface
      */
-    public function __toString()
+    public function getCommand()
     {
         return $this->command. $this->start_position. ','. $this->getHorizontalLength(). ','. $this->getVerticalLength();
+    }
+
+    public function __toString()
+    {
+        return $this->getCommand();
     }
 
     /**

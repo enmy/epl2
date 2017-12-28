@@ -1,7 +1,7 @@
 <?php
 namespace EPL2;
 
-class TextLines extends ASCIIText
+class TextLines extends ASCIIText implements CommandInterface
 {
     protected $max_length;
 
@@ -40,6 +40,9 @@ class TextLines extends ASCIIText
         $this->setMaxLength($max_length);
     }
 
+    /**
+     * @see EPL2\CommandInterface
+     */
     public function getCommand()
     {
         $texts = $this->splitData();
@@ -63,6 +66,11 @@ class TextLines extends ASCIIText
         }
 
         return $return;
+    }
+
+    public function __toString()
+    {
+        return $this->getCommand();
     }
 
     /**

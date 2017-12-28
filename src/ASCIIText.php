@@ -16,7 +16,7 @@ namespace EPL2;
  * p7 = N for normal or R for reverse image
  * “DATA” = Rep re sents a fixed data field.
  */
-class ASCIIText
+class ASCIIText implements CommandInterface
 {
     /** @var string El comando */
     protected $command = 'A';
@@ -54,11 +54,16 @@ class ASCIIText
     }
 
     /**
-     * @return El comando con sus parametros
+     * @see EPL2\CommandInterface
      */
-    public function __toString()
+    public function getCommand()
     {
         return $this->command. $this->start_position. ','. $this->rotation. ','. $this->font. ','. $this->multiplier_horizontal. ','. $this->multiplier_vertical. ','. $this->getReverse(). ',"'. $this->data. '"';
+    }
+
+    public function __toString()
+    {
+        return $this->getCommand();
     }
 
     public function getReverse()
