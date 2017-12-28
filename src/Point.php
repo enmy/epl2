@@ -9,13 +9,26 @@ class Point
 
     public function __construct($x, $y)
     {
+        $this->setPoint($x, $y);
+    }
+
+    public function __toString()
+    {
+        return implode(',', $this->getPoint());
+    }
+
+    public function setPoint($x, $y)
+    {
         $this->x = (int) $x;
 
         $this->y = (int) $y;
     }
 
-    public function __toString()
+    public function getPoint()
     {
-        return "{$this->x},{$this->y}";
+        return array(
+            'x' => $this->x,
+            'y' => $this->y,
+        );
     }
 }
