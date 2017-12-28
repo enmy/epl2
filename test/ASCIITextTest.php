@@ -26,11 +26,9 @@ final class ASCIITextTest extends TestCase
     {
         $a = new ASCIIText(new Point(300, 10), 5, 'test');
 
-        $a->setRotation(1);
-
-        $a->setMultipliers(2, 3);
-
-        $a->setReverse(true);
+        $a->setRotation(1)
+            ->setMultipliers(2, 3)
+            ->setReverse(true);
 
         $this->assertEquals(
             'A300,10,1,5,2,3,R,"TEST"',

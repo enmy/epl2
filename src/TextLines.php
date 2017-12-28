@@ -97,6 +97,8 @@ class TextLines extends ASCIIText
         }
 
         $this->max_length = $max_length;
+
+        return $this;
     }
 
     protected function buildASCIIText(Point $start_position, $data)

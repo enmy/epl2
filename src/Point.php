@@ -22,6 +22,8 @@ class Point
         $this->x = (int) $x;
 
         $this->y = (int) $y;
+
+        return $this;
     }
 
     public function getPoint()

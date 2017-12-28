@@ -82,6 +82,8 @@ class ASCIIText
         }
 
         $this->font = $font;
+
+        return $this;
     }
 
     /**
@@ -104,6 +106,8 @@ class ASCIIText
         $this->multiplier_horizontal = $horizontal;
 
         $this->multiplier_vertical = $vertical;
+
+        return $this;
     }
 
     /**
@@ -118,6 +122,8 @@ class ASCIIText
         }
 
         $this->rotation = $rotation;
+
+        return $this;
     }
 
     /**
@@ -126,5 +132,7 @@ class ASCIIText
     public function setReverse($reverse)
     {
         $this->reverse = (bool) $reverse;
+
+        return $this;
     }
 }

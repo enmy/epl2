@@ -32,11 +32,9 @@ final class TextLinesTest extends TestCase
     {
         $lines = new TextLines(new Point(300, 10), 1, 'TEST TEST', 32);
 
-        $lines->setRotation(1);
-
-        $lines->setMultipliers(2, 3);
-
-        $lines->setReverse(true);
+        $lines->setRotation(1)
+            ->setMultipliers(2, 3)
+            ->setReverse(true);
 
         $this->assertArraySubset(
             array(
