@@ -68,11 +68,6 @@ class TextLines extends ASCIIText implements CommandInterface
         return $return;
     }
 
-    public function __toString()
-    {
-        return $this->getCommand();
-    }
-
     /**
      * Divide el string $data dependiendo de $max_length
      *
