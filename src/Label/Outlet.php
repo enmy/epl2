@@ -62,7 +62,7 @@ class Outlet implements CommandInterface
         // Añade al inicio
         array_unshift($return, 'N');
 
-        $return[] = 'P'. $this->copies;
+        $return[] = 'P'. $this->copies. ',1';
 
         return $return;
     }

@@ -25,7 +25,7 @@ final class OutletTest extends TestCase
                 'A335,93,0,4,1,1,N,"7594"',
                 'A495,94,0,3,1,1,N,"OBSERVACIONES"',
 
-                'P1',
+                'P1,1',
             ),
             $o->getCommand()
         );
