@@ -208,4 +208,27 @@ final class TextLinesTest extends TestCase
 
         $lines = new TextLines(new Point(20, 10), 1, 'TEST TEST', 7);
     }
+
+    public function test_getHeight()
+    {
+        $font = 1;
+
+        $lines = new TextLines(new Point(20, 10), $font, 'TEST TEST', 32);
+
+        $font_sizes = TextLines::getFontSizes();
+
+        $this->assertEquals(
+            $font_sizes[$font]['y']*2,
+            $lines->getHeight()
+        );
+
+        $font = 3;
+
+        $lines = new TextLines(new Point(20, 10), $font, 'TEST TEST', 32);
+
+        $this->assertEquals(
+            $font_sizes[$font]['y']*4,
+            $lines->getHeight()
+        );
+    }
 }

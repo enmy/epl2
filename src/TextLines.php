@@ -121,4 +121,16 @@ class TextLines extends ASCIIText implements CommandInterface
     {
         return static::$font_sizes;
     }
+
+    public function getHeight()
+    {
+        $lines = $this->splitData();
+
+        return count($lines) * static::$font_sizes[$this->font]['y'];
+    }
+
+    public function setStartPosition(Point $start_position)
+    {
+        $this->start_position = $start_position;
+    }
 }

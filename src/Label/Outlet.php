@@ -24,17 +24,17 @@ class Outlet implements CommandInterface
     protected $config = array(
         'border' => array(
             'top' => 0,
-            'right' => 780,
+            'right' => 730,
             'bottom' => 210,
             'left' => 20,
         ),
         'table' => array(
-            'center_left_x' => 320,
-            'center_right_x' => 480,
+            'center_left_x' => 270,
+            'center_right_x' => 350,
             'width' => 5
         ),
         'font' => array(
-            'sku' => 3,
+            'sku' => 4,
             'registro' => 4,
             'observacion' => 3,
         ),
@@ -55,6 +55,10 @@ class Outlet implements CommandInterface
 
     public function getCommand()
     {
+        if ($this->copies <= 0) {
+            return array();
+        }
+
         $this->setCommands();
 
         $return = $this->commands->getCommand();
@@ -71,12 +75,17 @@ class Outlet implements CommandInterface
     {
         $this->commands = new CommandCollection;
 
-        $this->addTableLines($this->commands);
-
-        $this->addData($this->commands);
+        $this->addTableLines()
+            ->addData();
     }
 
-    protected function addTableLines($commands)
+    /**
+     * Realiza un dibujo parecido al siguiente:
+     *  ________
+     * |__|__|__|
+     *
+     */
+    protected function addTableLines()
     {
         // top
         $this->commands->add(
@@ -119,7 +128,7 @@ class Outlet implements CommandInterface
         $this->commands->add(
             new LineDrawBlack(
                 new Point(
-                    $this->config['border']['right'],
+                    $this->config['border']['right'] + $this->config['border']['left'] - $this->config['table']['width'],
                     $this->config['border']['top']
                 ),
                 $this->config['table']['width'],
@@ -153,77 +162,122 @@ class Outlet implements CommandInterface
                 LineDrawBlack::VERTICAL
             )
         );
+
+        return $this;
     }
 
-    protected function addData($commands)
+    protected function addData()
     {
-        $position = $this->calculatePositionForSku();
+        $this->addSku()
+            ->addRegistro()
+            ->addObservacion();
 
-        $this->commands->add(
-            new TextLines(
-                $position,
-                $this->config['font']['sku'],
-                $this->sku,
-                $this->config['table']['center_left_x']
+        return $this;
+    }
+
+    protected function addSku()
+    {
+        $sku = new TextLines(
+            new Point(0, 0), // set later
+            $this->config['font']['sku'],
+            $this->sku,
+            $this->config['table']['center_left_x']
+        );
+
+        $sku->setStartPosition(
+            $this->calculatePositionForSku(
+                $sku->getHeight()
             )
         );
 
-        $position = $this->calculatePositionForRegistro();
+        $this->commands->add($sku);
 
-        $this->commands->add(
-            new TextLines(
-                $position,
-                $this->config['font']['registro'],
-                $this->registro,
-                $this->config['table']['center_right_x'] - $this->config['table']['center_left_x']
+        return $this;
+    }
+
+    protected function addRegistro()
+    {
+        $registro = new TextLines(
+            new Point(0, 0), // set later
+            $this->config['font']['registro'],
+            $this->registro,
+            $this->config['table']['center_right_x'] - $this->config['table']['center_left_x']
+        );
+
+        $registro->setStartPosition(
+            $this->calculatePositionForRegistro(
+                $registro->getHeight()
             )
         );
 
-        $position = $this->calculatePositionForObservacion();
+        $this->commands->add($registro);
 
-        $this->commands->add(
-            new TextLines(
-                $position,
-                $this->config['font']['observacion'],
-                $this->observacion,
-                $this->config['border']['right'] - $this->config['table']['center_right_x']
+        return $this;
+    }
+
+    protected function addObservacion()
+    {
+        $observacion = new TextLines(
+            new Point(0, 0), // set later
+            $this->config['font']['observacion'],
+            $this->observacion,
+            $this->config['border']['right'] - $this->config['table']['center_right_x']
+        );
+
+        $observacion->setStartPosition(
+            $this->calculatePositionForObservacion(
+                $observacion->getHeight()
             )
         );
+
+        $this->commands->add($observacion);
+
+        return $this;
     }
 
     /**
      * Punto a la izquierta y centrado verticalmente.
      *
+     * @param int $height Altura en puntos del texto. Esta altura depende del numero de lineas y el tamaño de letra
      * @return EPL2\Point
      */
-    protected function calculatePositionForSku()
+    protected function calculatePositionForSku($height)
     {
         $font_sizes = TextLines::getFontSizes();
 
         // TODO: no toma en cuenta el multiplicador
         return new Point(
             $this->config['border']['left'] + $this->config['table']['width'] + 10,
-            (int) (($this->config['border']['top'] + $this->config['border']['bottom']) / 2 - $font_sizes[$this->config['font']['sku']]['y'] / 2)
+            $this->calculateCenterVerticalAlign($height)
         );
     }
 
-    protected function calculatePositionForRegistro()
+    protected function calculatePositionForRegistro($height)
     {
         $font_sizes = TextLines::getFontSizes();
 
         return new Point(
             $this->config['table']['center_left_x'] + $this->config['table']['width'] + 10,
-            (int) (($this->config['border']['top'] + $this->config['border']['bottom']) / 2 - $font_sizes[$this->config['font']['registro']]['y'] / 2)
+            $this->calculateCenterVerticalAlign($height)
         );
     }
 
-    protected function calculatePositionForObservacion()
+    protected function calculatePositionForObservacion($height)
     {
         $font_sizes = TextLines::getFontSizes();
 
         return new Point(
             $this->config['table']['center_right_x'] + $this->config['table']['width'] + 10,
-            (int) (($this->config['border']['top'] + $this->config['border']['bottom']) / 2 - $font_sizes[$this->config['font']['observacion']]['y'] / 2)
+            $this->calculateCenterVerticalAlign($height)
         );
+    }
+
+    /**
+     * @param int $height Altura en puntos del texto. Esta altura depende del numero de lineas y el tamaño de letra
+     * @return int
+     */
+    protected function calculateCenterVerticalAlign($height)
+    {
+        return (int) (($this->config['border']['top'] + $this->config['border']['bottom'] - $height) / 2);
     }
 }

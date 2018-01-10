@@ -13,21 +13,30 @@ final class OutletTest extends TestCase
             array(
                 'N',
                 // lineas horizontales
-                'LO20,0,780,5',
-                'LO20,210,780,5',
+                'LO20,0,730,5',
+                'LO20,210,730,5',
                 // lineas verticales
                 'LO20,0,5,210',
-                'LO780,0,5,210',
-                'LO320,0,5,210',
-                'LO480,0,5,210',
+                'LO745,0,5,210',
+                'LO270,0,5,210',
+                'LO350,0,5,210',
                 // datos
-                'A35,94,0,3,1,1,N,"SKU"',
-                'A335,93,0,4,1,1,N,"7594"',
-                'A495,94,0,3,1,1,N,"OBSERVACIONES"',
+                'A35,93,0,4,1,1,N,"SKU"',
+                'A285,93,0,4,1,1,N,"7594"',
+                'A365,94,0,3,1,1,N,"OBSERVACIONES"',
 
                 'P1,1',
             ),
             $o->getCommand()
+        );
+    }
+
+    public function test_no_copies()
+    {
+        $o = new Outlet('A', 1, 'B', 0);
+
+        $this->assertTrue(
+            empty($o->getCommand())
         );
     }
 }
